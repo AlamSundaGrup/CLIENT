@@ -4,7 +4,7 @@ export default function Sidebar() {
 
   const navigate = useNavigate()
   const handleCardClick = (e) => {
-    e.preventDefault()
+    // e.preventDefault()
     navigate(`/profile`);
   };
 
