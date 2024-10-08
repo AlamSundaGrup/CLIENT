@@ -3,11 +3,12 @@ import RootCreate from "./pages/RootCreate";
 import RegisterForm from "./components/RegisterForm";
 import ProfileForm from "./components/ProfileForm";
 import LoginForm from "./components/Loginform";
+import Homepage from "./pages/Homepage";
 
 export const router = createBrowserRouter([
   {
     path: "/home",
-    element: <h1>Hello World Guys!</h1>,
+    element: <Homepage />,
   },
   {
     path: "/",
