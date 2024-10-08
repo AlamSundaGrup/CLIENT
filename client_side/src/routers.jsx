@@ -1,22 +1,30 @@
-import { createBrowserRouter, redirect } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
+import RootCreate from "./pages/RootCreate";
+import RegisterForm from "./components/RegisterForm";
+import ProfileForm from "./components/ProfileForm";
+import LoginForm from "./components/Loginform";
 
 export const router = createBrowserRouter([
   {
-    path: "/register",
-    element: <h1>halo ini register</h1>,
-  },
-  {
-    path: "/login",
-    element: <h1>halo ini login</h1>,
+    path: "/home",
+    element: <h1>Hello World!</h1>,
   },
   {
     path: "/",
-    element: <h1>halo ini /</h1>,
-    children:[
-        {
-            path: "/profiles",
-            element: <h1>halo ini profiles</h1>,
-          },
-    ]
+    element: <RootCreate />,
+    children: [
+      {
+        path: "/register",
+        element: <RegisterForm />,
+      },
+      {
+        path: "/login",
+        element: <LoginForm />,
+      },
+      {
+        path: "/profiles/create",
+        element: <ProfileForm />,
+      },
+    ],
   },
 ]);
