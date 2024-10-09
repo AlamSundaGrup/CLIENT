@@ -1,15 +1,19 @@
 import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function ProfileForm() {
+  let navigate = useNavigate();
   const [profilePicture, setProfilePicture] = useState("");
   const [displayName, setDisplayName] = useState("");
 
   const handleSubmit = async (e) => {
-    let token = localStorage.getItem("access_token");
-    e.prevenDefault();
+    e.preventDefault();
     try {
+      let token = localStorage.getItem("access_token");
+
       await axios({
-        url: "http://localhost:3000/profile/create",
+        url: "http://localhost:3000/profiles",
         method: "post",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -20,14 +24,11 @@ export default function ProfileForm() {
         },
       });
       
-      navigate("/login");
+      navigate("/home");
     } catch (error) {
       console.log(error);
     }
 
-  };
-  const handleUrlChange = (e) => {
-    setProfilePicture(e.target.value);
   };
 
   return (
@@ -37,7 +38,7 @@ export default function ProfileForm() {
         <h1 className="text-4xl font-bold mb-8 text-gray-800 drop-shadow-lg">
           Create Your Profile
         </h1>
-        <form className="w-full max-w-md space-y-6">
+        <form className="w-full max-w-md space-y-6" onSubmit={handleSubmit}>
           {/* Profile Image URL Input */}
           <div className="flex flex-col items-center">
             <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mb-4 border-4 border-blue-400 shadow-lg">
@@ -76,7 +77,7 @@ export default function ProfileForm() {
               type="url"
               id="profilePicture"
               value={profilePicture}
-              onChange={handleUrlChange}
+              onChange={(e) => setProfilePicture(e.target.value)}
               className="w-full p-3 rounded-lg text-gray-800 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
               placeholder="Paste profile picture URL here"
             />
