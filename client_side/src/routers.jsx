@@ -2,7 +2,7 @@ import { createBrowserRouter, redirect } from "react-router-dom";
 import RootCreate from "./pages/RootCreate";
 import RegisterForm from "./components/RegisterForm";
 import ProfileForm from "./components/ProfileForm";
-import LoginForm from "../components/Loginform";
+import LoginForm from "./components/LoginForm";
 import Homepage from "./pages/Homepage";
 import LoginGoogle from "./pages/LoginGoogle";
 import { GoogleOAuthProvider } from "@react-oauth/google";
