@@ -1,32 +1,35 @@
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import axios from "axios";
 
 export default function RegisterForm() {
-  return (
-    const navigate = useNavigate();
+  let [email, setEmail] = useState("");
+  let [password, setPassword] = useState("");
+  let navigate = useNavigate();
 
-  const handleCredentialResponse = (response) => {
-    localStorage.setItem("access_token", response.credential);
-    navigate("/home");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await axios({
+        url: "http://localhost:3000/users/register",
+        method: "post",
+        data: {
+          email,
+          password,
+        },
+      });
+
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
   };
 
-  useEffect(() => {
-    google?.accounts.id.initialize({
-      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-      callback: handleCredentialResponse,
-    });
-    google?.accounts?.id?.renderButton(document.getElementById("buttonDiv"), {
-      theme: "outline",
-      size: "large",
-    });
-    google?.accounts.id.prompt();
-  }, []);
-
+  return (
     <>
-      {/* Right side - Register form */}
       <div className="flex flex-col items-center justify-center flex-1 p-8 text-gray-800 shadow-lg bg-opacity-20 backdrop-blur-lg rounded-2xl">
         <h1 className="mb-8 text-4xl font-bold text-gray-800">Join Us!</h1>
-        <form className="w-full max-w-sm">
+        <form className="w-full max-w-sm" onSubmit={handleSubmit}>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-semibold" htmlFor="email">
               Email Address
@@ -34,6 +37,8 @@ export default function RegisterForm() {
             <input
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 text-gray-800 bg-white border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
             />
@@ -48,6 +53,8 @@ export default function RegisterForm() {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 text-gray-800 bg-white border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Create a password"
             />

@@ -1,8 +1,30 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 export default function LoginForm() {
   const navigate = useNavigate();
+  let [email, setEmail] = useState("");
+  let [password, setPassword] = useState("");
+
+  const handleRegularLogin = async (e) => {
+    try {
+      e.preventDefault();
+      let user = await axios({
+        url: "http://localhost:3000/users/login",
+        method: "post",
+        data: {
+          email,
+          password,
+        },
+      });
+      localStorage.setItem("access_token", user.data.access_token);
+
+      navigate("/home");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleCredentialResponse = (response) => {
     localStorage.setItem("access_token", response.credential);
@@ -49,6 +71,8 @@ export default function LoginForm() {
               id="password"
               className="w-full p-3 text-gray-800 bg-white border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <button
@@ -59,6 +83,7 @@ export default function LoginForm() {
           </button>
         </form>
 
+        {/* Google Login */}
         <div id="buttonDiv" className="w-full max-w-sm mt-4"></div>
 
         <p className="mt-6 text-sm text-gray-800">
