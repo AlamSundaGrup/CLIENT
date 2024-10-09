@@ -1,14 +1,23 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProfileContext = createContext();
+const ProfileContext = createContext({
+    profiles: [],
+    profile:[],
+    loading: false,
+    error: null,
+    fetchProfiles: () => {},
+    fetchProfileById: () => {},
+});
 
 export const ProfileProvider = ({ children }) => {
+    const [profile, setProfile] = useState([]);
     const [profiles, setProfiles] = useState([]);
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
     const fetchProfiles = async () => {
+        setLoading(true);
         try {
             const token = localStorage.getItem('access_token');
             const response = await axios.get('http://localhost:3000/profiles', {
@@ -22,9 +31,13 @@ export const ProfileProvider = ({ children }) => {
             setError(error);
             setLoading(false);
         }
+        finally {
+            setLoading(false);
+        }
     };
 
     const fetchProfileById = async (id) => {
+        setLoading(true);
         try {
             const token = localStorage.getItem('access_token');
             const response = await axios.get(`http://localhost:3000/profiles/${id}`, {
@@ -32,24 +45,25 @@ export const ProfileProvider = ({ children }) => {
                     Authorization: `Bearer ${token}`,
                 },
             });
-            return response.data; 
+            setProfile(response.data); 
+            setLoading(false);
         } catch (error) {
-            console.error(error);
-            return null;
+            setError(error);
+            setLoading(false);
+        } finally {
+            setLoading(false);
         }
     };
 
-    useEffect(() => {
-        fetchProfiles();
-    }, [fetchProfiles]);
-
     return (
-        <ProfileContext.Provider value={{ profiles, loading, error, fetchProfileById }}>
+        <ProfileContext.Provider value={{ profiles, profile, loading, error, fetchProfileById }}>
             {children}
         </ProfileContext.Provider>
     );
 };
-
-export const useProfile = () => {
-    return useContext(ProfileContext);
-};
+    ProfileProvider.propTypes = {
+        children: PropTypes.node,
+    };
+// export const useProfile = () => {
+//     return useContext(ProfileContext);
+// };
