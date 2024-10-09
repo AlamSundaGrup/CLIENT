@@ -1,15 +1,10 @@
 import React, { useState } from "react";
 import ChatBubble from "../components/ChatBubble";
 import Sidebar from "../components/Sidebar";
+import backgroundImage from "../assets/background bw.jpg";
 
 export default function Homepage() {
-  const [messages, setMessages] = useState([
-    {
-      sender: "Kate Johnson",
-      text: "Recently I saw properties in great locations!",
-      isSender: false,
-    },
-  ]);
+  const [messages, setMessages] = useState([]);
   const [messageInput, setMessageInput] = useState("");
 
   const handleSendMessage = () => {
@@ -22,76 +17,88 @@ export default function Homepage() {
     }
   };
 
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleSendMessage();
+    }
+  };
+
   return (
-    <div className="drawer lg:drawer-open">
-      <input id="my-drawer" type="checkbox" className="drawer-toggle" />
-      <div className="drawer-content flex flex-col h-screen">
-        <div className="navbar bg-base-100">
-          <div className="flex-none lg:hidden">
-            <label htmlFor="my-drawer" className="btn btn-square btn-ghost">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                className="inline-block w-6 h-6 stroke-current"
+    <div className="h-screen flex flex-col">
+      <Sidebar />
+      <div
+        className="flex-grow bg-cover bg-center relative"
+        style={{
+          backgroundImage: `url(${backgroundImage})`,
+        }}
+      >
+        <div className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-[5px] z-0"></div>
+
+        {/* Chat Container */}
+        <div className="flex justify-center items-center h-full z-10 relative">
+          <div
+            className="relative border border-500/50  bg-black bg-opacity-20 backdrop-blur-xl rounded-lg shadow-xl p-3"
+            style={{ width: "1100px", height: "500px" }}
+          >
+            {/* Chat  */}
+            <div className="h-[380px] overflow-y-auto mb-4">
+              {messages.length > 0 ? (
+                messages.map((message, index) => (
+                  <ChatBubble
+                    key={index}
+                    text={message.text}
+                    sender={message.sender}
+                    isSender={message.isSender}
+                  />
+                ))
+              ) : (
+                <div className="text-gray-500 text-center mt-10">
+                  No messages yet
+                </div>
+              )}
+            </div>
+
+            {/* ChatBar */}
+            <div
+              className="flex justify-center items-center"
+              style={{
+                position: "absolute",
+                bottom: "20px",
+                left: "20px",
+                right: "20px",
+              }}
+            >
+              <input
+                type="text"
+                placeholder="Type a message..."
+                className="input input-bordered flex-grow md:w-1/2"
+                value={messageInput}
+                onChange={(e) => setMessageInput(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button
+                className="btn btn-square ml-2"
+                onClick={handleSendMessage}
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M4 6h16M4 12h16M4 18h16"
-                ></path>
-              </svg>
-            </label>
-          </div>
-          <div className="flex-1">
-            <a className="font-oswald font-extrabold normal-case text-xl">
-              BELAKANGAN
-            </a>
-          </div>
-        </div>
-
-        <div className="flex-grow overflow-y-auto p-4 bg-base-200">
-          {messages.map((message, index) => (
-            <ChatBubble
-              key={index}
-              text={message.text}
-              sender={message.sender}
-              isSender={message.isSender}
-            />
-          ))}
-        </div>
-
-        <div className="bg-base-100 p-4">
-          <div className="flex items-center space-x-2">
-            <input
-              type="text"
-              placeholder="Type a message..."
-              className="input input-bordered flex-grow"
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
-            />
-
-            <button className="btn btn-square" onClick={handleSendMessage}>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
-                />
-              </svg>
-            </button>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-6 w-6"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"
+                  />
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </div>
-      <Sidebar />
     </div>
   );
 }
