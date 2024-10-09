@@ -8,6 +8,6 @@ export default {
         poppins: ["Poppins", "sans-serif"],
       },
     },
-    plugins: [require("daisyui")],
   },
+  plugins: [require("daisyui")],
 };
