@@ -1,25 +1,21 @@
 import { Link } from "react-router-dom";
-import aetherSunset from "../assets/front.png"; 
+import front from "../assets/front.png";
 
 export default function LoginForm() {
-  const backgroundColor = "#17233B"; 
+  const backgroundColor = "#17233B";
   return (
     <div
       className="min-h-screen flex justify-center items-center relative"
       style={{ backgroundColor }}
     >
-
       <div className="bg-[#D0B181] flex justify-between items-center w-[1000px] h-auto lg:h-[500px] rounded-xl shadow-lg overflow-hidden mx-auto relative p-6">
-      
         <div className="w-[50%] h-full flex flex-col justify-center items-center pl-8 pr-8">
           <h1 className="text-5xl font-oswald font-extrabold mb-1 text-[#17233bff]">
             LOGIN
           </h1>{" "}
-          {/* Oswald 900 */}
           <p className="text-sm mb-4 mt-1 text-[#17233bff] font-poppins">
             TO YOUR ACCOUNT
           </p>{" "}
-          {/* Poppins for subheading */}
           <form className="space-y-4 w-full">
             <div>
               <label
@@ -72,13 +68,13 @@ export default function LoginForm() {
           </p>
         </div>
 
-        {/* Short Vertical line beside the form */}
+        {/* GARIS BIRU TENGAH-TENGAH */}
         <div className="h-[300px] w-1 border-l-4 border-[#17233bff]"></div>
 
-        {/* Right side - Image */}
+        {/* IMAGE*/}
         <div className="w-[50%] h-full flex justify-center items-center p-6">
           <img
-            src={aetherSunset}
+            src={front}
             alt="Aether Sunset"
             className="h-full w-auto object-contain"
           />
