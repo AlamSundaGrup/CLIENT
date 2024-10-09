@@ -41,7 +41,7 @@ export const ProfileProvider = ({ children }) => {
 
     useEffect(() => {
         fetchProfiles();
-    }, []);
+    }, [fetchProfiles]);
 
     return (
         <ProfileContext.Provider value={{ profiles, loading, error, fetchProfileById }}>
