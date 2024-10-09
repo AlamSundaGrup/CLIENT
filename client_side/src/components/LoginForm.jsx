@@ -1,89 +1,77 @@
-import { Link } from "react-router-dom";
-import aetherSunset from "../assets/front.png"; 
+
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function LoginForm() {
-  const backgroundColor = "#17233B"; 
+  const navigate = useNavigate();
+
+  const handleCredentialResponse = (response) => {
+    localStorage.setItem("access_token", response.credential);
+    navigate("/home");
+  };
+
+  useEffect(() => {
+    
+      google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+      });
+      google.accounts.id.renderButton(document.getElementById("buttonDiv"), {
+        theme: "outline",
+        size: "large",
+      });
+      google.accounts.id.prompt();
+    
+  }, []);
+
   return (
-    <div
-      className="min-h-screen flex justify-center items-center relative"
-      style={{ backgroundColor }}
-    >
-
-      <div className="bg-[#D0B181] flex justify-between items-center w-[1000px] h-auto lg:h-[500px] rounded-xl shadow-lg overflow-hidden mx-auto relative p-6">
-      
-        <div className="w-[50%] h-full flex flex-col justify-center items-center pl-8 pr-8">
-          <h1 className="text-5xl font-oswald font-extrabold mb-1 text-[#17233bff]">
-            LOGIN
-          </h1>{" "}
-          {/* Oswald 900 */}
-          <p className="text-sm mb-4 mt-1 text-[#17233bff] font-poppins">
-            TO YOUR ACCOUNT
-          </p>{" "}
-          {/* Poppins for subheading */}
-          <form className="space-y-4 w-full">
-            <div>
-              <label
-                className="block text-sm font-poppins mb-2 text-[#9D6C4A]"
-                htmlFor="email"
-              >
-                E-mail
-              </label>
-              <input
-                type="email"
-                id="email"
-                className="w-full p-3 rounded-md text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#D0B181]" // Ecru for focus ring
-                placeholder="Enter your email"
-              />
-            </div>
-            <div>
-              <label
-                className="block text-sm font-poppins mb-2 text-[#9D6C4A]"
-                htmlFor="password"
-              >
-                Password
-              </label>
-              <input
-                type="password"
-                id="password"
-                className="w-full p-3 rounded-md text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#D0B181]" // Ecru for focus ring
-                placeholder="Enter your password"
-              />
-            </div>
-            <button
-              type="submit"
-              className="w-full p-1.5 text-xs font-poppins rounded-md bg-[#5A857B] hover:bg-[#9D6C4A] text-white font-semibold transition-all duration-300" // Hooker's Green for button background, Raw Umber for hover
-            >
-              SIGN IN
-            </button>
-          </form>
-          <button className="mt-4 w-full p-1.5 text-xs rounded-md bg-[#D9CEB5] hover:bg-[#5A857B] font-poppins font-semibold text-gray-700 flex justify-center items-center transition-all duration-300">
-            <img
-              src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
-              alt="Google logo"
-              className="w-4 h-4 mr-2"
+    <>
+      <div className="flex flex-col items-center justify-center flex-1 p-8 text-gray-800 shadow-lg bg-opacity-20 backdrop-blur-lg rounded-2xl">
+        <h1 className="mb-8 text-4xl font-bold text-gray-800">Welcome Back!</h1>
+        <form className="w-full max-w-sm">
+          <div className="mb-6">
+            <label className="block mb-2 text-sm font-semibold" htmlFor="email">
+              Email Address
+            </label>
+            <input
+              type="email"
+              id="email"
+              className="w-full p-3 text-gray-800 bg-white border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your email"
             />
-            SIGN IN WITH GOOGLE
+          </div>
+          <div className="mb-6">
+            <label
+              className="block mb-2 text-sm font-semibold"
+              htmlFor="password"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              id="password"
+              className="w-full p-3 text-gray-800 bg-white border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Enter your password"
+            />
+          </div>
+          <button
+            type="submit"
+            className="w-full p-3 font-semibold text-white transition-all duration-300 bg-blue-600 rounded-lg hover:bg-blue-700"
+          >
+            Sign In
           </button>
-          <p className="mt-4 text-sm font-poppins text-gray-800">
-            Don&apos;t have an account?{" "}
-            <Link to="/register" className="text-[#9D6C4A] underline">
-              Sign up
-            </Link>
-          </p>
-        </div>
+        </form>
 
-        {/* Short Vertical line beside the form */}
-        <div className="h-[300px] w-1 border-l-4 border-[#17233bff]"></div>
+        <div id="buttonDiv" className="w-full max-w-sm mt-4"></div>
 
-        {/* Right side - Image */}
-        <div className="w-[50%] h-full flex justify-center items-center p-6">
-          <img
-            src={aetherSunset}
-            alt="Aether Sunset"
-            className="h-full w-auto object-contain"
-          />
-        </div>
+        <p className="mt-6 text-sm text-gray-800">
+          Don&apos;t have an account?{" "}
+          <Link to={"/register"} className="text-blue-500 underline">
+            Sign up here
+          </Link>
+        </p>
       </div>
-    </div>
+    </>
   );
 }
+
