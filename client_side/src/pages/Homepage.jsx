@@ -5,6 +5,8 @@ import ChatBubble from "../components/ChatBubble";
 const socket = io("http://localhost:3000");
 
 export default function Homepage() {
+  const [messages, setMessages] = useState([]);
+  const [messageInput, setMessageInput] = useState("");
   const [messages, setMessages] = useState([
     {
       sender: "Kate Johnson",
