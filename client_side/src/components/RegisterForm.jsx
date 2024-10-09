@@ -1,7 +1,27 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 export default function RegisterForm() {
   return (
+    const navigate = useNavigate();
+
+  const handleCredentialResponse = (response) => {
+    localStorage.setItem("access_token", response.credential);
+    navigate("/home");
+  };
+
+  useEffect(() => {
+    google?.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse,
+    });
+    google?.accounts?.id?.renderButton(document.getElementById("buttonDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+    google?.accounts.id.prompt();
+  }, []);
+
     <>
       {/* Right side - Register form */}
       <div className="flex flex-col items-center justify-center flex-1 p-8 text-gray-800 shadow-lg bg-opacity-20 backdrop-blur-lg rounded-2xl">

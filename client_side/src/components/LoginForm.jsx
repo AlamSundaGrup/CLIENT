@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
@@ -11,17 +10,15 @@ export default function LoginForm() {
   };
 
   useEffect(() => {
-    
-      google.accounts.id.initialize({
-        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
-        callback: handleCredentialResponse,
-      });
-      google.accounts.id.renderButton(document.getElementById("buttonDiv"), {
-        theme: "outline",
-        size: "large",
-      });
-      google.accounts.id.prompt();
-    
+    google?.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse,
+    });
+    google?.accounts?.id?.renderButton(document.getElementById("buttonDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+    google?.accounts.id.prompt();
   }, []);
 
   return (
@@ -74,4 +71,3 @@ export default function LoginForm() {
     </>
   );
 }
-
