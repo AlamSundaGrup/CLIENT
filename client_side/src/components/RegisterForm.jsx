@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 export default function RegisterForm() {
+  let navigate = useNavigate();
   let [email, setEmail] = useState("");
   let [password, setPassword] = useState("");
-  let navigate = useNavigate();
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
     try {
+      e.preventDefault();
       await axios({
         url: "http://localhost:3000/users/register",
         method: "post",
@@ -18,12 +18,30 @@ export default function RegisterForm() {
           password,
         },
       });
+      // localStorage.setItem("access_token", user.data.access_token);
 
       navigate("/login");
     } catch (error) {
       console.log(error);
     }
   };
+
+  const handleCredentialResponse = (response) => {
+    localStorage.setItem("access_token", response.credential);
+    navigate("/home");
+  };
+
+  useEffect(() => {
+    google?.accounts.id.initialize({
+      client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+      callback: handleCredentialResponse,
+    });
+    google?.accounts?.id?.renderButton(document.getElementById("buttonDiv"), {
+      theme: "outline",
+      size: "large",
+    });
+    google?.accounts.id.prompt();
+  }, []);
 
   return (
     <>
@@ -69,7 +87,7 @@ export default function RegisterForm() {
         </form>
 
         {/* Google Sign-Up Button */}
-        <div className="w-full max-w-sm mt-4">
+        <div id="buttonDiv" className="w-full max-w-sm mt-4">
           <Link
             to={"/login-google"}
             className="flex items-center justify-center w-full p-3 font-semibold text-gray-700 transition-all duration-300 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
