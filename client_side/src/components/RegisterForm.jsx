@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
 
 export default function RegisterForm() {
   let [email, setEmail] = useState("");
@@ -11,7 +13,7 @@ export default function RegisterForm() {
     e.preventDefault();
     try {
       await axios({
-        url: "http://localhost:3000/register",
+        url: "http://localhost:3000/users/register",
         method: "post",
         data: {
           email,
