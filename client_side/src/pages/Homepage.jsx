@@ -1,68 +1,8 @@
-import React, { useState } from "react";
-
-// ChatBubble component
-const ChatBubble = ({ text, sender, isSender }) => (
-  <div className={`chat ${isSender ? "chat-end" : "chat-start"}`}>
-    <div className="chat-header">{sender}</div>
-    <div className={`chat-bubble ${isSender ? "chat-bubble-primary" : ""}`}>
-      {text}
-    </div>
-  </div>
-);
-
-// Sidebar component with profile hover effect
-const Sidebar = () => {
-  return (
-    <div className="sidebar-container h-screen">
-      <ul className="menu p-1 w-full md:w-20 h-full bg-base-200 text-base-content flex flex-col justify-between">
-        <div className="flex-grow"></div>
-
-        <div className="relative group">
-          <button className="btn btn-ghost mb-4">
-            <img
-              src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              alt="Profile"
-              className="w-10 h-10 rounded-full mr-3"
-            />
-          </button>
-
-          <div className="absolute bottom-14 left-0 bg-base-100 text-base-content rounded-lg p-4 shadow-lg hidden group-hover:block w-48">
-            <div className="flex items-center"></div>
-            <div className="mt-2">
-              {/* You can open the modal using document.getElementById('ID').showModal() method */}
-              <button
-                className="btn btn-sm btn-primary w-full"
-                onClick={() =>
-                  document.getElementById("my_modal_3").showModal()
-                }
-              >
-                Profile
-              </button>
-              <dialog id="my_modal_3" className="modal">
-                <div className="modal-box w-full">
-                  <form method="dialog">
-                    {/* if there is a button in form, it will close the modal */}
-                    <button className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
-                      ✕
-                    </button>
-                  </form>
-                  <h3 className="font-bold text-lg">Hello!</h3>
-                  <p className="py-4">
-                    Press ESC key or click on ✕ button to close
-                  </p>
-                </div>
-              </dialog>
-              <button className="btn btn-sm btn-secondary w-full mt-1">
-                Logout
-              </button>
-            </div>
-          </div>
-        </div>
-      </ul>
-    </div>
-  );
-};
-
+import { useEffect, useState } from "react";
+import { io } from "socket.io-client";
+import Sidebar from "../components/Sidebar";
+import ChatBubble from "../components/ChatBubble";
+const socket = io("http://localhost:3000");
 
 export default function Homepage() {
   const [messages, setMessages] = useState([
@@ -72,17 +12,39 @@ export default function Homepage() {
       isSender: false,
     },
   ]);
-  const [messageInput, setMessageInput] = useState("");
 
-  const handleSendMessage = () => {
-    if (messageInput.trim()) {
-      setMessages([
-        ...messages,
-        { sender: "You", text: messageInput, isSender: true },
-      ]);
-      setMessageInput("");
+  const [message, setMessage] = useState("");
+
+  const handleSendMessage = (e) => {
+    e.preventDefault();
+    try {
+      if (!message) throw new Error("Message is required");
+      const token = localStorage.getItem("access_token");
+
+      socket.emit("send-message", { message, token });
+      setMessage("");
+    } catch (error) {
+      console.log(error);
     }
   };
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("A new user has joined the chat");
+    });
+
+    socket.on("globalMessage", (msg) => {
+      console.log("Global message:", msg);
+    });
+
+    socket.on("userLeft", (msg) => {
+      console.log(msg);
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
 
   return (
     <div className="drawer lg:drawer-open">
@@ -124,17 +86,19 @@ export default function Homepage() {
           ))}
         </div>
 
-        <div className="bg-base-100 p-4">
+        <form className="bg-base-100 p-4" onSubmit={handleSendMessage}> 
+           {/* Ini juga tadinya bukan form */}
           <div className="flex items-center space-x-2">
             <input
               type="text"
               placeholder="Type a message..."
               className="input input-bordered flex-grow"
-              value={messageInput}
-              onChange={(e) => setMessageInput(e.target.value)}
+              value={message}
+              onChange={(e) => setMessage(e.target.value)}  
+              // Ini diganti logicnya
             />
-
-            <button className="btn btn-square" onClick={handleSendMessage}>
+            <button className="btn btn-square" type="submit">  
+              {/* Tadinya gaada type submit */}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-6 w-6"
@@ -151,7 +115,7 @@ export default function Homepage() {
               </svg>
             </button>
           </div>
-        </div>
+        </form>
       </div>
       <Sidebar />
     </div>
