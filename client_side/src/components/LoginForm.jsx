@@ -19,16 +19,39 @@ export default function LoginForm() {
         },
       });
       localStorage.setItem("access_token", user.data.access_token);
+     
+      let profile = await axios({
+        url: "http://localhost:3000/users/validateProfile",
+        method: "get",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        }
+      });
 
-      navigate("/home");
+
+      if(profile.data.message === "Profile not found, please create your profile first"){
+        navigate("/profiles/create");
+      } else{
+        navigate("/home");
+      }
     } catch (error) {
       console.log(error);
     }
   };
 
-  const handleCredentialResponse = (response) => {
+  const handleCredentialResponse = async (response) => {
     localStorage.setItem("access_token", response.credential);
-    navigate("/home");
+   
+    let profile = await axios({
+      url: "http://localhost:3000/users/validateProfile",
+      method: "post",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      }
+    });
+
+console.log(profile, "<<<<<<<<<<<<<<<<<");
+
   };
 
   useEffect(() => {

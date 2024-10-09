@@ -1,16 +1,24 @@
-import React from "react";
-
-export default function ChatBubble({ text, sender, isSender }) {
+export default function ChatBubble({ text, sender, profilePicture, isSender, timestamp }) {
   return (
-    <div className={`flex ${isSender ? "justify-end" : "justify-start"} mb-4`}>
+    <div className={`chat ${isSender ? "chat-end" : "chat-start"}`}>
+      <div className="chat-image avatar">
+        <div className="w-10 rounded-full">
+          <img src={profilePicture} alt={sender} />
+        </div>
+      </div>
+      <div className="chat-header">
+        {sender}
+        <time className="text-xs opacity-50 ml-2">
+          {new Date(timestamp).toLocaleTimeString()}
+        </time>
+      </div>
       <div
-        className={`rounded-lg p-3 ${
-          isSender ? "bg-blue-500 text-white" : "bg-gray-200 text-black"
-        } max-w-xs`}
+        className={`chat-bubble ${
+          isSender ? "bg-primary text-white" : "bg-base-100"
+        }`}
       >
-        <div className="text-sm">{sender}</div>
-        <div>{text}</div>
+        {text}
       </div>
     </div>
   );
-}
+};
