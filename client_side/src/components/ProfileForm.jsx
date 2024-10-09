@@ -1,10 +1,33 @@
 import { useState } from "react";
 
 export default function ProfileForm() {
-  const [profileImageUrl, setProfileImageUrl] = useState("");
+  const [profilePicture, setProfilePicture] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
+  const handleSubmit = async (e) => {
+    let token = localStorage.getItem("access_token");
+    e.prevenDefault();
+    try {
+      await axios({
+        url: "http://localhost:3000/profile/create",
+        method: "post",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        data: {
+          displayName,
+          profilePicture,
+        },
+      });
+      
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+
+  };
   const handleUrlChange = (e) => {
-    setProfileImageUrl(e.target.value);
+    setProfilePicture(e.target.value);
   };
 
   return (
@@ -18,9 +41,9 @@ export default function ProfileForm() {
           {/* Profile Image URL Input */}
           <div className="flex flex-col items-center">
             <div className="w-32 h-32 rounded-full bg-gray-200 flex items-center justify-center overflow-hidden mb-4 border-4 border-blue-400 shadow-lg">
-              {profileImageUrl ? (
+              {profilePicture ? (
                 <img
-                  src={profileImageUrl}
+                  src={profilePicture}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
@@ -45,14 +68,14 @@ export default function ProfileForm() {
           <div>
             <label
               className="block text-sm font-semibold mb-1 text-gray-800"
-              htmlFor="profileImageUrl"
+              htmlFor="profilePicture"
             >
               Profile Picture URL
             </label>
             <input
               type="url"
-              id="profileImageUrl"
-              value={profileImageUrl}
+              id="profilePicture"
+              value={profilePicture}
               onChange={handleUrlChange}
               className="w-full p-3 rounded-lg text-gray-800 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
               placeholder="Paste profile picture URL here"
@@ -63,15 +86,17 @@ export default function ProfileForm() {
           <div>
             <label
               className="block text-sm font-semibold mb-1 text-gray-800"
-              htmlFor="username"
+              htmlFor="displayName"
             >
               Username
             </label>
             <input
               type="text"
-              id="username"
+              id="displayName"
+              value={displayName}
+              onChange={(e)=>setDisplayName(e.target.value)}
               className="w-full p-3 rounded-lg text-gray-800 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white shadow-sm"
-              placeholder="Enter your username"
+              placeholder="Enter your displayName"
             />
           </div>
 
