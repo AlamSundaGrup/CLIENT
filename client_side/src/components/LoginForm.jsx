@@ -10,7 +10,7 @@ export default function LoginForm() {
   };
 
   useEffect(() => {
-    window.onload = function () {
+    
       google.accounts.id.initialize({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         callback: handleCredentialResponse,
@@ -20,7 +20,7 @@ export default function LoginForm() {
         size: "large",
       });
       google.accounts.id.prompt();
-    };
+    
   }, []);
 
   return (
