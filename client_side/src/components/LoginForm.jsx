@@ -1,64 +1,89 @@
 import { Link } from "react-router-dom";
+import aetherSunset from "../assets/front.png"; 
 
 export default function LoginForm() {
+  const backgroundColor = "#17233B"; 
   return (
-    <>
-      {/* Right side - Sign-in form */}
-      <div className="flex-1 flex flex-col items-center justify-center bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-lg text-gray-800 p-8">
-        <h1 className="text-4xl font-bold mb-8 text-gray-800">Welcome Back!</h1>
-        <form className="w-full max-w-sm">
-          <div className="mb-6">
-            <label className="block text-sm font-semibold mb-2" htmlFor="email">
-              Email Address
-            </label>
-            <input
-              type="email"
-              id="email"
-              className="w-full p-3 rounded-lg text-gray-800 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-              placeholder="Enter your email"
-            />
-          </div>
-          <div className="mb-6">
-            <label
-              className="block text-sm font-semibold mb-2"
-              htmlFor="password"
-            >
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              className="w-full p-3 rounded-lg text-gray-800 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-              placeholder="Enter your password"
-            />
-          </div>
-          <button
-            type="submit"
-            className="w-full p-3 rounded-lg bg-blue-600 hover:bg-blue-700 font-semibold text-white transition-all duration-300"
-          >
-            Sign In
-          </button>
-        </form>
+    <div
+      className="min-h-screen flex justify-center items-center relative"
+      style={{ backgroundColor }}
+    >
 
-        {/* Google Sign-In Button */}
-        <div className="mt-4 w-full max-w-sm">
-          <button className="w-full p-3 rounded-lg bg-white border border-gray-300 hover:bg-gray-50 font-semibold text-gray-700 transition-all duration-300 flex items-center justify-center">
+      <div className="bg-[#D0B181] flex justify-between items-center w-[1000px] h-auto lg:h-[500px] rounded-xl shadow-lg overflow-hidden mx-auto relative p-6">
+      
+        <div className="w-[50%] h-full flex flex-col justify-center items-center pl-8 pr-8">
+          <h1 className="text-5xl font-oswald font-extrabold mb-1 text-[#17233bff]">
+            LOGIN
+          </h1>{" "}
+          {/* Oswald 900 */}
+          <p className="text-sm mb-4 mt-1 text-[#17233bff] font-poppins">
+            TO YOUR ACCOUNT
+          </p>{" "}
+          {/* Poppins for subheading */}
+          <form className="space-y-4 w-full">
+            <div>
+              <label
+                className="block text-sm font-poppins mb-2 text-[#9D6C4A]"
+                htmlFor="email"
+              >
+                E-mail
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="w-full p-3 rounded-md text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#D0B181]" // Ecru for focus ring
+                placeholder="Enter your email"
+              />
+            </div>
+            <div>
+              <label
+                className="block text-sm font-poppins mb-2 text-[#9D6C4A]"
+                htmlFor="password"
+              >
+                Password
+              </label>
+              <input
+                type="password"
+                id="password"
+                className="w-full p-3 rounded-md text-gray-800 border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#D0B181]" // Ecru for focus ring
+                placeholder="Enter your password"
+              />
+            </div>
+            <button
+              type="submit"
+              className="w-full p-1.5 text-xs font-poppins rounded-md bg-[#5A857B] hover:bg-[#9D6C4A] text-white font-semibold transition-all duration-300" // Hooker's Green for button background, Raw Umber for hover
+            >
+              SIGN IN
+            </button>
+          </form>
+          <button className="mt-4 w-full p-1.5 text-xs rounded-md bg-[#D9CEB5] hover:bg-[#5A857B] font-poppins font-semibold text-gray-700 flex justify-center items-center transition-all duration-300">
             <img
               src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"
               alt="Google logo"
-              className="w-5 h-5 mr-2"
+              className="w-4 h-4 mr-2"
             />
-            Sign in with Google
+            SIGN IN WITH GOOGLE
           </button>
+          <p className="mt-4 text-sm font-poppins text-gray-800">
+            Don&apos;t have an account?{" "}
+            <Link to="/register" className="text-[#9D6C4A] underline">
+              Sign up
+            </Link>
+          </p>
         </div>
 
-        <p className="mt-6 text-sm text-gray-800">
-          Don&apos;t have an account?{" "}
-          <Link to={"/register"} className="text-blue-500 underline">
-            Sign up here
-          </Link>
-        </p>
+        {/* Short Vertical line beside the form */}
+        <div className="h-[300px] w-1 border-l-4 border-[#17233bff]"></div>
+
+        {/* Right side - Image */}
+        <div className="w-[50%] h-full flex justify-center items-center p-6">
+          <img
+            src={aetherSunset}
+            alt="Aether Sunset"
+            className="h-full w-auto object-contain"
+          />
+        </div>
       </div>
-    </>
+    </div>
   );
 }
