@@ -1,12 +1,37 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export default function RegisterForm() {
+  let [email, setEmail] = useState("");
+  let [password, setPassword] = useState("");
+  let navigate = useNavigate();
+
+
+  const handleSubmit = async (e)=>{
+    e.preventDefault();
+    try {
+      await axios({
+        url: "http://localhost:3000/register",
+        method: "post",
+        data: {
+          email,
+          password,
+        },
+      });
+      
+      navigate("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  
+
   return (
     <>
-      {/* Right side - Register form */}
+     
       <div className="flex-1 flex flex-col items-center justify-center bg-opacity-20 backdrop-blur-lg rounded-2xl shadow-lg text-gray-800 p-8">
         <h1 className="text-4xl font-bold mb-8 text-gray-800">Join Us!</h1>
-        <form className="w-full max-w-sm">
+        <form className="w-full max-w-sm"onSubmit={handleSubmit} >
           <div className="mb-6">
             <label className="block text-sm font-semibold mb-2" htmlFor="email">
               Email Address
@@ -14,6 +39,8 @@ export default function RegisterForm() {
             <input
               type="email"
               id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="w-full p-3 rounded-lg text-gray-800 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               placeholder="Enter your email"
             />
@@ -28,6 +55,8 @@ export default function RegisterForm() {
             <input
               type="password"
               id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 rounded-lg text-gray-800 border border-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
               placeholder="Create a password"
             />
