@@ -19,19 +19,21 @@ export default function LoginForm() {
         },
       });
       localStorage.setItem("access_token", user.data.access_token);
-     
+
       let profile = await axios({
         url: "http://localhost:3000/users/validateProfile",
         method: "get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        }
+        },
       });
 
-
-      if(profile.data.message === "Profile not found, please create your profile first"){
+      if (
+        profile.data.message ===
+        "Profile not found, please create your profile first"
+      ) {
         navigate("/profiles/create");
-      } else{
+      } else {
         navigate("/home");
       }
     } catch (error) {
@@ -41,17 +43,14 @@ export default function LoginForm() {
 
   const handleCredentialResponse = async (response) => {
     localStorage.setItem("access_token", response.credential);
-   
+
     let profile = await axios({
       url: "http://localhost:3000/users/validateProfile",
       method: "post",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-      }
+      },
     });
-
-console.log(profile, "<<<<<<<<<<<<<<<<<");
-
   };
 
   useEffect(() => {
@@ -70,7 +69,7 @@ console.log(profile, "<<<<<<<<<<<<<<<<<");
     <>
       <div className="flex flex-col items-center justify-center flex-1 p-8 text-gray-800 shadow-lg bg-opacity-20 backdrop-blur-lg rounded-2xl">
         <h1 className="mb-8 text-4xl font-bold text-gray-800">Welcome Back!</h1>
-        <form className="w-full max-w-sm">
+        <form className="w-full max-w-sm" onSubmit={handleRegularLogin}>
           <div className="mb-6">
             <label className="block mb-2 text-sm font-semibold" htmlFor="email">
               Email Address
@@ -80,6 +79,8 @@ console.log(profile, "<<<<<<<<<<<<<<<<<");
               id="email"
               className="w-full p-3 text-gray-800 bg-white border border-blue-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
           <div className="mb-6">

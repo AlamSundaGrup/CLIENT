@@ -8,10 +8,32 @@ const socket = io("http://localhost:3000");
 export default function Homepage() {
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
+  let [currentUser, setCurrentUser] = useState(null);
   const messagesEndRef = useRef(null);
-
+  console.log(currentUser);
+  
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  const checkUser = async () => {
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await fetch("http://localhost:3000/users/validateProfile", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+
+      if (data.message === "User not found") {
+        setCurrentUser(null);
+      } else {
+        setCurrentUser(data.id);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const getAllMessages = async () => {
@@ -23,13 +45,27 @@ export default function Homepage() {
         },
       });
       const data = await response.json();
-      setMessages(data);
+
+      const formattedMessages = data.map((msg) => (
+        {
+        message: msg.message || "No message",
+        sender: msg.Profile?.displayName || "User",
+        profilePicture:
+          msg.Profile?.profilePicture ||
+          "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg",
+        isSender: currentUser === msg.ProfileId,
+        timestamp: msg.createdAt || new Date().toISOString(),
+      }
+    ));
+
+      setMessages(formattedMessages);
     } catch (error) {
       console.error(error);
     }
   };
 
   useEffect(scrollToBottom, [messages]);
+
   const handleSendMessage = (e) => {
     e.preventDefault();
     try {
@@ -48,18 +84,8 @@ export default function Homepage() {
       console.log("A new user has joined the chat");
     });
 
-    socket.on("globalMessage", (msg) => {
-      console.log("Global message:", msg);
-      setMessages((prevMessages) => [
-        ...prevMessages,
-        {
-          message: msg.message || msg.text, // adjust to match incoming structure
-          sender: msg.Profile?.displayName || "User", // if no sender, use "Bot" as fallback
-          profilePicture: msg.Profile?.profilePicture || "https://img.freepik.com/premium-vector/default-avatar-profile-icon-social-media-user-image-gray-avatar-icon-blank-profile-silhouette-vector-illustration_561158-3467.jpg", // fallback image
-          isSender: msg.isSender || false, // default to false if not provided
-          timestamp: msg.createdAt, // use the createdAt timestamp
-        },
-      ]);
+    socket.on("globalMessage", () => {
+      getAllMessages();
     });
 
     socket.on("userLeft", (msg) => {
@@ -67,22 +93,21 @@ export default function Homepage() {
     });
 
     return () => {
-      if (socket.readyState === 1) { // <-- This is important
+      if (socket.readyState === 1) {
         socket.close();
-    }
+      }
     };
   }, []);
 
   useEffect(() => {
+    checkUser();
     getAllMessages();
-  }, [messages]);
+  }, []);
 
   return (
     <div className="drawer lg:drawer-open">
       <input id="my-drawer" type="checkbox" className="drawer-toggle" />
       <div className="drawer-content flex flex-col h-screen">
-        {/* Navbar code... */}
-
         <div className="flex-grow overflow-y-auto p-4 bg-base-200">
           {messages.map((msg, index) => (
             <ChatBubble
@@ -107,7 +132,6 @@ export default function Homepage() {
               onChange={(e) => setMessage(e.target.value)}
             />
             <button className="btn btn-square" type="submit">
-              {/* SVG icon... */}
               <i className="fi fi-sr-paper-plane"></i>
             </button>
           </div>
@@ -117,10 +141,6 @@ export default function Homepage() {
     </div>
   );
 }
-
-
-
-
 
 // import { useEffect, useState } from "react";
 // import { io } from "socket.io-client";

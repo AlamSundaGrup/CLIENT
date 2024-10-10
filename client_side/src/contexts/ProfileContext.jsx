@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useState } from 'react';
 import axios from 'axios';
+import PropTypes from 'prop-types';
 
 const ProfileContext = createContext({
     profiles: [],
@@ -56,7 +57,7 @@ export const ProfileProvider = ({ children }) => {
     };
 
     return (
-        <ProfileContext.Provider value={{ profiles, profile, loading, error, fetchProfileById }}>
+        <ProfileContext.Provider value={{ profiles, profile, loading, error, fetchProfileById, fetchProfiles }}>
             {children}
         </ProfileContext.Provider>
     );
