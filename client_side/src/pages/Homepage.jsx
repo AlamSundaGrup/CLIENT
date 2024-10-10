@@ -1,16 +1,18 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useContext } from "react";
 import { io } from "socket.io-client";
 import Sidebar from "../components/Sidebar";
 import ChatBubble from "../components/ChatBubble";
+import { ProfileContext } from "../contexts/ProfileContext";
 
 const socket = io("http://localhost:3000");
 
 export default function Homepage() {
+  const {profile,fetchProfileById} = useContext(ProfileContext);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
   let [currentUser, setCurrentUser] = useState(null);
   const messagesEndRef = useRef(null);
-  console.log(currentUser);
+  
   
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -105,13 +107,16 @@ export default function Homepage() {
   //   }
   //   fetchData();
   // }, []);
+  
 
   useEffect(() => {
     checkUser();
   }, []);
-
+  
   useEffect(() => {
     getAllMessages()
+    console.log(currentUser,"<<<<<<<<<<<");
+    fetchProfileById(currentUser);
   }, [currentUser])
 
   return (

@@ -2,7 +2,7 @@ import React, { createContext, useState } from 'react';
 import axios from 'axios';
 import PropTypes from 'prop-types';
 
-const ProfileContext = createContext({
+export const ProfileContext = createContext({
     profiles: [],
     profile:[],
     loading: false,
@@ -12,6 +12,7 @@ const ProfileContext = createContext({
 });
 
 export const ProfileProvider = ({ children }) => {
+
     const [profile, setProfile] = useState([]);
     const [profiles, setProfiles] = useState([]);
     const [loading, setLoading] = useState(false);
@@ -39,13 +40,18 @@ export const ProfileProvider = ({ children }) => {
 
     const fetchProfileById = async (id) => {
         setLoading(true);
+        
         try {
+            console.log(id,"=======");
             const token = localStorage.getItem('access_token');
+            
             const response = await axios.get(`http://localhost:3000/profiles/${id}`, {
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             });
+            console.log(response,"iddiidid");
+
             setProfile(response.data); 
             setLoading(false);
         } catch (error) {

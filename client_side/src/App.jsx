@@ -1,6 +1,6 @@
 import { RouterProvider } from 'react-router-dom'
 import { router } from './routers'
-import { ProfileProvider } from './contexts/profilecontext';
+import { ProfileProvider } from './contexts/ProfileContext';
 
 export function App() {
   return (
