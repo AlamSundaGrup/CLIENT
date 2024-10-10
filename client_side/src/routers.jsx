@@ -4,12 +4,10 @@ import RegisterForm from "./components/RegisterForm";
 import ProfileForm from "./components/ProfileForm";
 import LoginForm from "./components/LoginForm";
 import Homepage from "./pages/Homepage";
-import LoginGoogle from "./pages/LoginGoogle";
-import { GoogleOAuthProvider } from "@react-oauth/google";
 
 export const router = createBrowserRouter([
   {
-    path: "/home",
+    path: "/",
     element: <Homepage />,
     loader: () => {
       if (!localStorage.getItem("access_token")) {
@@ -23,10 +21,6 @@ export const router = createBrowserRouter([
     element: <RootCreate />,
     children: [
       {
-        path: "/register",
-        element: <RegisterForm />,
-      },
-      {
         path: "/login",
         element: <LoginForm />,
         loader: () => {
@@ -35,6 +29,10 @@ export const router = createBrowserRouter([
           }
           return null;
         },
+      },
+      {
+        path: "/register",
+        element: <RegisterForm />,
       },
       {
         path: "/profiles/create",

@@ -18,7 +18,6 @@ export default function RegisterForm() {
           password,
         },
       });
-      // localStorage.setItem("access_token", user.data.access_token);
 
       navigate("/login");
     } catch (error) {
@@ -88,8 +87,8 @@ export default function RegisterForm() {
 
         {/* Google Sign-Up Button */}
         <div id="buttonDiv" className="w-full max-w-sm mt-4">
-          <Link
-            to={"/login-google"}
+          <button
+            to={"/login"}
             className="flex items-center justify-center w-full p-3 font-semibold text-gray-700 transition-all duration-300 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
           >
             <img
@@ -98,7 +97,7 @@ export default function RegisterForm() {
               className="w-5 h-5 mr-2"
             />
             Sign up with Google
-          </Link>
+          </button>
         </div>
 
         <p className="mt-6 text-sm text-gray-800">

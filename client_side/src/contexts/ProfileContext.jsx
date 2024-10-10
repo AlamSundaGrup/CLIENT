@@ -1,76 +1,77 @@
-import React, { createContext, useState } from 'react';
-import axios from 'axios';
-import PropTypes from 'prop-types';
+import { createContext, useState } from "react";
+import axios from "axios";
+import PropTypes from "prop-types";
 
 export const ProfileContext = createContext({
-    profiles: [],
-    profile:[],
-    loading: false,
-    error: null,
-    fetchProfiles: () => {},
-    fetchProfileById: () => {},
+  profiles: [],
+  profile: [],
+  isLoading: false,
+  error: null,
+  fetchProfiles: () => {},
+  fetchProfileById: () => {},
 });
 
 export const ProfileProvider = ({ children }) => {
+  const [profile, setProfile] = useState([]);
+  const [profiles, setProfiles] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-    const [profile, setProfile] = useState([]);
-    const [profiles, setProfiles] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
+  const fetchProfiles = async () => {
+    setIsLoading(true);
+    try {
+      const token = localStorage.getItem("access_token");
+      const response = await axios.get("http://localhost:3000/profiles", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setProfiles(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      setError(error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-    const fetchProfiles = async () => {
-        setLoading(true);
-        try {
-            const token = localStorage.getItem('access_token');
-            const response = await axios.get('http://localhost:3000/profiles', {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            setProfiles(response.data);
-            setLoading(false);
-        } catch (error) {
-            setError(error);
-            setLoading(false);
-        }
-        finally {
-            setLoading(false);
-        }
-    };
-
-    const fetchProfileById = async (id) => {
-        setLoading(true);
+  const fetchProfileById = async (id) => {
+    setIsLoading(true);
+    try {
+        const token = localStorage.getItem("access_token");
         
-        try {
-            console.log(id,"=======");
-            const token = localStorage.getItem('access_token');
-            
-            const response = await axios.get(`http://localhost:3000/profiles/${id}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            });
-            console.log(response,"iddiidid");
+        const response = await axios.get(`http://localhost:3000/profiles/${id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        
+      setProfile(response.data);
+      setIsLoading(false);
+    } catch (error) {
+      setError(error);
+      setIsLoading(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-            setProfile(response.data); 
-            setLoading(false);
-        } catch (error) {
-            setError(error);
-            setLoading(false);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    return (
-        <ProfileContext.Provider value={{ profiles, profile, loading, error, fetchProfileById, fetchProfiles }}>
-            {children}
-        </ProfileContext.Provider>
-    );
+  return (
+    <ProfileContext.Provider
+      value={{
+        profiles,
+        profile,
+        isLoading,
+        error,
+        fetchProfileById,
+        fetchProfiles,
+      }}
+    >
+      {children}
+    </ProfileContext.Provider>
+  );
 };
-    ProfileProvider.propTypes = {
-        children: PropTypes.node,
-    };
-// export const useProfile = () => {
-//     return useContext(ProfileContext);
-// };
+ProfileProvider.propTypes = {
+  children: PropTypes.node,
+};
