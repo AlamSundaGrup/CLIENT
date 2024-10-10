@@ -1,0 +1,5 @@
+--hookers-green: #5a857bff;
+--ecru: #d0b181ff;
+--dun: #d9ceb5ff;
+--raw-umber: #9d6c4aff;
+--oxford-blue: #17233bff;
