@@ -24,12 +24,11 @@ export default function Homepage() {
           Authorization: `Bearer ${token}`,
         },
       });
-      const data = await response.json();
-
-      if (data.message === "User not found") {
-        setCurrentUser(null);
-      } else {
+      if (response.ok) {
+        const data = await response.json();
         setCurrentUser(data.id);
+      } else {
+        setCurrentUser(null);
       }
     } catch (error) {
       console.log(error);
@@ -45,7 +44,7 @@ export default function Homepage() {
         },
       });
       const data = await response.json();
-
+      
       const formattedMessages = data.map((msg) => (
         {
         message: msg.message || "No message",
@@ -99,10 +98,21 @@ export default function Homepage() {
     };
   }, []);
 
+  // useEffect(() => {
+  //   async function fetchData() {
+  //     await checkUser();
+  //     await getAllMessages();
+  //   }
+  //   fetchData();
+  // }, []);
+
   useEffect(() => {
     checkUser();
-    getAllMessages();
   }, []);
+
+  useEffect(() => {
+    getAllMessages()
+  }, [currentUser])
 
   return (
     <div className="drawer lg:drawer-open">
