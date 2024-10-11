@@ -14,7 +14,7 @@ const Sidebar = () => {
     try {
       const token = localStorage.getItem("access_token");
       const response = await axios.get(
-        "http://localhost:3000/users/validateProfile",
+        "https://belakangan.ajiesep.tech/users/validateProfile",
         {
           headers: {
             Authorization: `Bearer ${token}`,

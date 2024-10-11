@@ -3,7 +3,7 @@ import { io } from "socket.io-client";
 import Sidebar from "../components/Sidebar";
 import ChatBubble from "../components/ChatBubble";
 
-const socket = io("http://localhost:3000");
+const socket = io("https://belakangan.ajiesep.tech/");
 
 export default function Homepage() {
   const [messages, setMessages] = useState([]);
@@ -19,7 +19,7 @@ export default function Homepage() {
     try {
       const token = localStorage.getItem("access_token");
       const response = await fetch(
-        "http://localhost:3000/users/validateProfile",
+        "https://belakangan.ajiesep.tech/validateProfile",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ export default function Homepage() {
   const getAllMessages = async () => {
     try {
       const token = localStorage.getItem("access_token");
-      const response = await fetch("http://localhost:3000/messages", {
+      const response = await fetch("https://belakangan.ajiesep.tech/messages", {
         headers: {
           Authorization: `Bearer ${token}`,
         },

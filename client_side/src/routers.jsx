@@ -7,7 +7,7 @@ import Homepage from "./pages/Homepage";
 
 export const router = createBrowserRouter([
   {
-    path: "/",
+    path: "/home",
     element: <Homepage />,
     loader: () => {
       if (!localStorage.getItem("access_token")) {

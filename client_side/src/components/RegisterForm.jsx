@@ -11,7 +11,7 @@ export default function RegisterForm() {
     try {
       e.preventDefault();
       await axios({
-        url: "http://localhost:3000/users/register",
+        url: "https://belakangan.ajiesep.tech/users/register",
         method: "post",
         data: {
           email,

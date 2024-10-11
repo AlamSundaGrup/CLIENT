@@ -11,7 +11,7 @@ export default function LoginForm() {
     try {
       e.preventDefault();
       let user = await axios({
-        url: "http://localhost:3000/users/login",
+        url: "https://belakangan.ajiesep.tech/users/login",
         method: "post",
         data: {
           email,
@@ -21,7 +21,7 @@ export default function LoginForm() {
       localStorage.setItem("access_token", user.data.access_token);
 
       let profile = await axios({
-        url: "http://localhost:3000/users/validateProfile",
+        url: "https://belakangan.ajiesep.tech/users/validateProfile",
         method: "get",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
@@ -45,7 +45,7 @@ export default function LoginForm() {
     localStorage.setItem("access_token", response.credential);
 
     let profile = await axios({
-      url: "http://localhost:3000/users/validateProfile",
+      url: "https://belakangan.ajiesep.tech/users/validateProfile",
       method: "post",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("access_token")}`,

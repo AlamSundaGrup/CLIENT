@@ -21,7 +21,7 @@ export const ProfileProvider = ({ children }) => {
     setIsLoading(true);
     try {
       const token = localStorage.getItem("access_token");
-      const response = await axios.get("http://localhost:3000/profiles", {
+      const response = await axios.get("https://belakangan.ajiesep.tech/profiles", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -41,7 +41,7 @@ export const ProfileProvider = ({ children }) => {
     try {
         const token = localStorage.getItem("access_token");
         
-        const response = await axios.get(`http://localhost:3000/profiles/${id}`, {
+        const response = await axios.get(`https://belakangan.ajiesep.tech/profiles/${id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

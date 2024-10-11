@@ -13,7 +13,7 @@ export default function ProfileForm() {
       let token = localStorage.getItem("access_token");
 
       await axios({
-        url: "http://localhost:3000/profiles",
+        url: "https://belakangan.ajiesep.tech/profiles",
         method: "post",
         headers: {
           Authorization: `Bearer ${token}`,
